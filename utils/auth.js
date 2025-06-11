@@ -224,29 +224,22 @@ export async function createUserProfile(userId, email, username) {
   }
 }
 
-// ✅ Şifre güncelleme (reset flow sonrası)
-
 export async function updateUserPassword(accessToken, refreshToken, newPassword) {
   try {
-    // 1. Oturumu access + refresh token ile kur
-    const { error: sessionError } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken,
+    const response = await fetch('https://hkjyktpxcbmqjfaapdju.supabase.co/auth/v1/user', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        'x-refresh-token': refreshToken || '', // Yeni satır eklendi
+      },
+      body: JSON.stringify({ password: newPassword }),
     });
 
-    if (sessionError) {
-      console.error('⛔ Oturum ayarlanamadı:', sessionError.message);
-      return { error: { message: 'Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş olabilir.' } };
-    }
-
-    // 2. Şifreyi güncelle
-    const { error: updateError } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-
-    if (updateError) {
-      console.error('⛔ Şifre güncelleme hatası:', updateError.message);
-      return { error: { message: 'Şifre güncellenemedi. Lütfen tekrar deneyin.' } };
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('⛔ Şifre güncelleme hatası:', error.message);
+      return { error: { message: error.message || 'Şifre güncellenemedi.' } };
     }
 
     console.log('✅ Şifre başarıyla güncellendi.');
@@ -256,6 +249,7 @@ export async function updateUserPassword(accessToken, refreshToken, newPassword)
     return { error: { message: 'Beklenmeyen bir hata oluştu.' } };
   }
 }
+
 
 
 

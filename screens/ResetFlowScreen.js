@@ -1,56 +1,84 @@
 import { useState } from 'react';
-import { Alert, Button, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput
+} from 'react-native';
 import { updateUserPassword } from '../utils/auth';
 
 export default function ResetFlowScreen({ accessToken, refreshToken, onResetComplete }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
-    if (newPassword !== confirmPassword) {
-      Alert.alert('Hata', 'Şifreler eşleşmiyor.');
+    if (!newPassword || !confirmPassword) {
+      Alert.alert('Eksik Bilgi', 'Lütfen tüm alanları doldurun.');
       return;
     }
 
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Hata', 'Şifreler uyuşmuyor.');
+      return;
+    }
+
+    setLoading(true);
+
     const result = await updateUserPassword(accessToken, refreshToken, newPassword);
 
+    setLoading(false);
+
     if (result?.error) {
-      Alert.alert('Hata', result.error.message);
+      Alert.alert('Şifre Güncelleme Hatası', result.error.message);
     } else {
-      Alert.alert('Başarılı', 'Şifreniz başarıyla güncellendi.');
+      Alert.alert('Başarılı', 'Şifreniz başarıyla güncellendi!');
       onResetComplete();
     }
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Yeni Şifre Belirleyin</Text>
       <TextInput
-        placeholder="Yeni Şifre"
         secureTextEntry
+        style={styles.input}
+        placeholder="Yeni Şifre"
         value={newPassword}
         onChangeText={setNewPassword}
-        style={styles.input}
       />
       <TextInput
-        placeholder="Şifreyi Onayla"
         secureTextEntry
+        style={styles.input}
+        placeholder="Şifreyi Onaylayın"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
-        style={styles.input}
       />
-      <Button title="Şifreyi Güncelle" onPress={handleReset} />
-    </View>
+      <Button title={loading ? 'Şifre Güncelleniyor...' : 'Şifreyi Güncelle'} onPress={handleReset} disabled={loading} />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     flex: 1,
+    padding: 24,
     justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   input: {
-    borderBottomWidth: 1,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 16,
+    padding: 12,
+    borderRadius: 8,
   },
 });

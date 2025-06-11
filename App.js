@@ -44,26 +44,23 @@ export default function App() {
       }
 
       if (rawPath === 'reset-password') {
-  const access = data.queryParams?.access_token;
-  const refresh = data.queryParams?.refresh_token; // ✅ eklendi
+        const access = data.queryParams?.access_token;
+        const refresh = data.queryParams?.refresh_token;
 
-  if (access) {
-    setResetToken(access);
-    setRefreshToken(refresh || null); // refresh boş gelirse null ata
-    setCurrentScreen('reset');
-    setIsLoggedIn(false);
-    setLoading(false);
-  } else {
-    console.warn('❗ reset-password için token bulunamadı');
-  }
-}
-
-
+        if (access) {
+          setResetToken(access);
+          setRefreshToken(refresh || null);
+          setCurrentScreen('reset');
+          setIsLoggedIn(false);
+          setLoading(false);
+        } else {
+          console.warn('❗ reset-password için token bulunamadı');
+        }
+      }
     };
 
     const subscription = Linking.addListener('url', handleDeepLink);
 
-    // ✅ Uygulama kapalıyken açılıyorsa
     (async () => {
       const initialUrl = await Linking.getInitialURL();
       console.log('🌐 InitialURL:', initialUrl);
@@ -105,7 +102,8 @@ export default function App() {
     console.log('🧪 isLoggedIn:', isLoggedIn);
     console.log('🧪 currentScreen:', currentScreen);
     console.log('🧪 resetToken:', resetToken);
-  }, [isLoggedIn, currentScreen, resetToken]);
+    console.log('🧪 refreshToken:', refreshToken);
+  }, [isLoggedIn, currentScreen, resetToken, refreshToken]);
 
   // ✅ Yükleniyor ekranı
   if (loading || !deepLinkChecked) {
@@ -121,14 +119,14 @@ export default function App() {
     <NavigationContainer linking={linking}>
       {currentScreen === 'reset' ? (
         <ResetFlowScreen
-  accessToken={resetToken}
-  refreshToken={refreshToken}
-  onResetComplete={() => {
-    setCurrentScreen('login');
-    setResetToken(null);
-    setRefreshToken(null); // ✅ eklendi
-  }}
-/>
+          accessToken={resetToken}
+          refreshToken={refreshToken}
+          onResetComplete={() => {
+            setCurrentScreen('login');
+            setResetToken(null);
+            setRefreshToken(null);
+          }}
+        />
       ) : isLoggedIn ? (
         <TabNavigator
           onLogout={() => {
