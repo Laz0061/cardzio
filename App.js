@@ -28,6 +28,7 @@ export default function App() {
   const [deepLinkChecked, setDeepLinkChecked] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('login'); // login | register | forgot | reset
   const [resetToken, setResetToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
   // ✅ Deep Link yakalama
   useEffect(() => {
@@ -44,8 +45,11 @@ export default function App() {
 
       if (rawPath === 'reset-password') {
   const access = data.queryParams?.access_token;
+  const refresh = data.queryParams?.refresh_token; // ✅ eklendi
+
   if (access) {
     setResetToken(access);
+    setRefreshToken(refresh || null); // refresh boş gelirse null ata
     setCurrentScreen('reset');
     setIsLoggedIn(false);
     setLoading(false);
@@ -53,6 +57,7 @@ export default function App() {
     console.warn('❗ reset-password için token bulunamadı');
   }
 }
+
 
     };
 
@@ -116,12 +121,14 @@ export default function App() {
     <NavigationContainer linking={linking}>
       {currentScreen === 'reset' ? (
         <ResetFlowScreen
-          accessToken={resetToken}
-          onResetComplete={() => {
-            setCurrentScreen('login');
-            setResetToken(null);
-          }}
-        />
+  accessToken={resetToken}
+  refreshToken={refreshToken}
+  onResetComplete={() => {
+    setCurrentScreen('login');
+    setResetToken(null);
+    setRefreshToken(null); // ✅ eklendi
+  }}
+/>
       ) : isLoggedIn ? (
         <TabNavigator
           onLogout={() => {
