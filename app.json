@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "CARDZIO",
+    "slug": "cardzio",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.cardzio",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["cardzio"]
+          }
+        ]
+      }
+    },
+    "android": {
+      "package": "com.yourcompany.cardzio",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "cardzio.net",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "https",
+              "host": "cardzio-verify.netlify.app",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "cardzio"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "scheme": "cardzio",
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "SUPABASE_URL": "https://hkjyktpxcbmqjfaapdju.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhranlrdHB4Y2JtcWpmYWFwZGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MTI0MTIsImV4cCI6MjA2NDM4ODQxMn0.vcBWZ2EMv5hNs3byWo5nMc6Ilv4gK43Hgr_5ubabEys",
+      "eas": {
+        "projectId": "add7fb8c-cff4-46ad-93c6-6457ca4d3673"
+      }
+    },
+    "owner": "laz0061"
+  }
+}
