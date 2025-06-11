@@ -24,29 +24,24 @@
       }
     },
     "android": {
-      "package": "com.yourcompany.cardzio",
-      "intentFilters": [
+  "package": "com.yourcompany.cardzio",
+  "intentFilters": [
+    {
+      "action": "VIEW",
+      "data": [
         {
-          "action": "VIEW",
-          "data": [
-            {
-              "scheme": "https",
-              "host": "cardzio.net",
-              "pathPrefix": "/"
-            },
-            {
-              "scheme": "https",
-              "host": "cardzio-verify.netlify.app",
-              "pathPrefix": "/"
-            },
-            {
-              "scheme": "cardzio"
-            }
-          ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "scheme": "https",
+          "host": "cardzio.net",
+          "pathPrefix": "/"
+        },
+        {
+          "scheme": "cardzio"
         }
-      ]
-    },
+      ],
+      "category": ["BROWSABLE", "DEFAULT"]
+    }
+  ]
+},
     "scheme": "cardzio",
     "web": {
       "favicon": "./assets/images/favicon.png"

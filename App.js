@@ -43,18 +43,17 @@ export default function App() {
       }
 
       if (rawPath === 'reset-password') {
-        const access = data.queryParams?.access_token;
-const refresh = data.queryParams?.refresh_token;
-
-if (access && refresh) {
-  setResetToken({ access_token: access, refresh_token: refresh });
-  setCurrentScreen('reset');
-  setIsLoggedIn(false);
-  setLoading(false);
-} else {
-  console.warn('❗ reset-password için token bulunamadı');
+  const access = data.queryParams?.access_token;
+  if (access) {
+    setResetToken(access);
+    setCurrentScreen('reset');
+    setIsLoggedIn(false);
+    setLoading(false);
+  } else {
+    console.warn('❗ reset-password için token bulunamadı');
+  }
 }
-      }
+
     };
 
     const subscription = Linking.addListener('url', handleDeepLink);

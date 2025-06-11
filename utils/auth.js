@@ -225,11 +225,11 @@ export async function createUserProfile(userId, email, username) {
 }
 
 // ✅ Şifre güncelleme (reset flow sonrası)
-export async function updateUserPassword(accessToken, refreshToken, newPassword) {
+export async function updateUserPassword(accessToken, refreshToken = '', newPassword) {
   try {
     const { error: sessionError } = await supabase.auth.setSession({
       access_token: accessToken,
-      refresh_token: refreshToken,
+      refresh_token: refreshToken || '', // boşsa yine string verelim ama asla `undefined` olmasın
     });
 
     if (sessionError) {
@@ -257,3 +257,4 @@ export async function updateUserPassword(accessToken, refreshToken, newPassword)
     return { error: { message: 'Beklenmeyen bir hata oluştu.' } };
   }
 }
+
