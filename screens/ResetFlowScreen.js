@@ -46,7 +46,7 @@ export default function ResetFlowScreen({ accessToken, onResetComplete }) {
       return;
     }
 
-    const { error, success } = await updateUserPassword(accessToken, '', newPassword);
+    const { error, success } = await updateUserPassword(accessToken, newPassword);
 
     if (error) {
       console.error('⛔ Şifre güncellenemedi:', error.message);
