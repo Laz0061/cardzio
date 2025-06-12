@@ -224,16 +224,17 @@ export async function createUserProfile(userId, email, username) {
   }
 }
 
-export async function updateUserPassword(accessToken, refreshToken, newPassword) {
+
+export async function updateUserPassword(accessToken, newPassword) {
   try {
     const response = await fetch('https://hkjyktpxcbmqjfaapdju.supabase.co/auth/v1/user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'x-refresh-token': refreshToken || '', // Yeni satır eklendi
+        'apikey': supabase.supabaseKey, // ✅ API KEY BURADA
+        'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ password: newPassword }),
+      body: JSON.stringify({ password: newPassword })
     });
 
     if (!response.ok) {
@@ -249,6 +250,7 @@ export async function updateUserPassword(accessToken, refreshToken, newPassword)
     return { error: { message: 'Beklenmeyen bir hata oluştu.' } };
   }
 }
+
 
 
 
