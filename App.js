@@ -29,24 +29,6 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('login'); // login | register | forgot | reset
   const [resetToken, setResetToken] = useState(null);
 
-  // ✅ Supabase event listener
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('🔁 Supabase auth event:', event);
-
-      if (event === 'PASSWORD_RECOVERY' && session?.access_token) {
-        setResetToken(session.access_token);
-        setCurrentScreen('reset');
-        setIsLoggedIn(false);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
   // ✅ Deep Link yakalama
   useEffect(() => {
     const handleDeepLink = (event) => {
@@ -61,9 +43,16 @@ export default function App() {
       }
 
       if (rawPath === 'reset-password') {
-        // Deep link yönlendirmesi uygulamayı açtığında, Supabase event'i çalışacak.
-        // Buraya bir şey yapmamıza gerek yok.
-        console.log('📲 reset-password deep link tetiklendi');
+        const access = data.queryParams?.access_token;
+
+        if (access) {
+          setResetToken(access);
+          setCurrentScreen('reset');
+          setIsLoggedIn(false);
+          setLoading(false);
+        } else {
+          console.warn('❗ reset-password için token bulunamadı');
+        }
       }
     };
 
@@ -83,10 +72,10 @@ export default function App() {
     };
   }, []);
 
-  // ✅ Oturum kontrolü (reset ekranı dışı için)
+  // ✅ Oturum kontrolü (reset ekranı dışında)
   useEffect(() => {
     async function fetchSession() {
-      if (resetToken) return; // PASSWORD_RECOVERY yönlendirmesi zaten reset ekranına aldı
+      if (resetToken) return;
 
       const { data, error } = await supabase.auth.getSession();
       if (error || !data.session) {
