@@ -225,8 +225,21 @@ export async function createUserProfile(userId, email, username) {
 }
 
 
-export async function updateUserPassword(accessToken, newPassword) {
+
+export async function updateUserPassword(accessToken, refreshToken, newPassword) {
   try {
+    // ⬇️ 1. Oturumu manuel olarak kur
+    const { error: sessionError } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+
+    if (sessionError) {
+      console.error('⛔ Oturum kurulamadı:', sessionError.message);
+      return { error: { message: 'Oturum kurulamadı. Link süresi dolmuş olabilir.' } };
+    }
+
+    // ⬇️ 2. Şifre güncelleme isteği
     const response = await fetch('https://hkjyktpxcbmqjfaapdju.supabase.co/auth/v1/user', {
       method: 'PUT',
       headers: {
@@ -250,6 +263,7 @@ export async function updateUserPassword(accessToken, newPassword) {
     return { error: { message: 'Beklenmeyen bir hata oluştu.' } };
   }
 }
+
 
 
 
