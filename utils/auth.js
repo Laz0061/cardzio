@@ -224,14 +224,12 @@ export async function createUserProfile(userId, email, username) {
   }
 }
 
-
-
-export async function updateUserPassword(accessToken, refreshToken, newPassword) {
+export async function updateUserPassword(accessToken, newPassword) {
   try {
-    // ⬇️ 1. Oturumu manuel olarak kur
+    // access_token ile Supabase oturumu başlat
     const { error: sessionError } = await supabase.auth.setSession({
       access_token: accessToken,
-      refresh_token: refreshToken,
+      refresh_token: '' // refresh_token gerekli değil
     });
 
     if (sessionError) {
@@ -239,21 +237,14 @@ export async function updateUserPassword(accessToken, refreshToken, newPassword)
       return { error: { message: 'Oturum kurulamadı. Link süresi dolmuş olabilir.' } };
     }
 
-    // ⬇️ 2. Şifre güncelleme isteği
-    const response = await fetch('https://hkjyktpxcbmqjfaapdju.supabase.co/auth/v1/user', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhranlrdHB4Y2JtcWpmYWFwZGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MTI0MTIsImV4cCI6MjA2NDM4ODQxMn0.vcBWZ2EMv5hNs3byWo5nMc6Ilv4gK43Hgr_5ubabEys'
-      },
-      body: JSON.stringify({ password: newPassword })
+    // oturum kurulduktan sonra şifreyi değiştir
+    const { error: updateError } = await supabase.auth.updateUser({
+      password: newPassword
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error('⛔ Şifre güncelleme hatası:', error.message);
-      return { error: { message: error.message || 'Şifre güncellenemedi.' } };
+    if (updateError) {
+      console.error('⛔ Şifre güncelleme hatası:', updateError.message);
+      return { error: { message: updateError.message || 'Şifre güncellenemedi.' } };
     }
 
     console.log('✅ Şifre başarıyla güncellendi.');
@@ -263,6 +254,7 @@ export async function updateUserPassword(accessToken, refreshToken, newPassword)
     return { error: { message: 'Beklenmeyen bir hata oluştu.' } };
   }
 }
+
 
 
 

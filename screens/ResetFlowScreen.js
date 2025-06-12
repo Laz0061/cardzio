@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { updateUserPassword } from '../utils/auth';
 
-export default function ResetFlowScreen({ accessToken, refreshToken, onResetComplete }) {
+export default function ResetFlowScreen({ accessToken, onResetComplete }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ export default function ResetFlowScreen({ accessToken, refreshToken, onResetComp
 
     setLoading(true);
 
-    const result = await updateUserPassword(accessToken, refreshToken, newPassword);
+    const result = await updateUserPassword(accessToken, newPassword); // ✅ refreshToken çıkarıldı
 
     setLoading(false);
 
@@ -35,7 +35,7 @@ export default function ResetFlowScreen({ accessToken, refreshToken, onResetComp
       Alert.alert('Şifre Güncelleme Hatası', result.error.message);
     } else {
       Alert.alert('Başarılı', 'Şifreniz başarıyla güncellendi!');
-      onResetComplete();
+      onResetComplete(); // ✅ App.js içindeki yönlendirmeyi tetikler
     }
   };
 
@@ -56,7 +56,11 @@ export default function ResetFlowScreen({ accessToken, refreshToken, onResetComp
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
-      <Button title={loading ? 'Şifre Güncelleniyor...' : 'Şifreyi Güncelle'} onPress={handleReset} disabled={loading} />
+      <Button
+        title={loading ? 'Şifre Güncelleniyor...' : 'Şifreyi Güncelle'}
+        onPress={handleReset}
+        disabled={loading}
+      />
     </SafeAreaView>
   );
 }
