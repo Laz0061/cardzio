@@ -231,8 +231,8 @@ export async function updateUserPassword(accessToken, newPassword) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': supabase.supabaseKey, // ✅ API KEY BURADA
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhranlrdHB4Y2JtcWpmYWFwZGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MTI0MTIsImV4cCI6MjA2NDM4ODQxMn0.vcBWZ2EMv5hNs3byWo5nMc6Ilv4gK43Hgr_5ubabEys'
       },
       body: JSON.stringify({ password: newPassword })
     });
