@@ -233,6 +233,7 @@ export async function updateUserPassword(accessToken, newPassword) {
     });
 
     if (sessionError) {
+      console.log('🔍 Gelen token:', accessToken); // ← burası eklensin
       console.error('⛔ Oturum kurulamadı:', sessionError.message);
       return { error: { message: 'Oturum kurulamadı. Link süresi dolmuş olabilir.' } };
     }
