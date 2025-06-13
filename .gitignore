@@ -2,6 +2,7 @@
 *
 
 # Ama bu dosya ve klasörleri dahil et
+!reset.html
 !netlify.toml
 !netlify/
 !netlify/functions/
