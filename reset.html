@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Yönlendiriliyor...</title>
+    <meta charset="UTF-8" />
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const tokenHash = params.get('token_hash');
+      const type = params.get('type');
+      const next = params.get('next') || 'cardzio://reset-password';
+
+      if (tokenHash && type === 'recovery') {
+        const deepLink = `cardzio://reset-password?token_hash=${tokenHash}&type=${type}`;
+        window.location.href = deepLink;
+      } else {
+        window.location.href = 'cardzio://reset-password';
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Yönlendiriliyorsunuz...</h2>
+  </body>
+</html>
