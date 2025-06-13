@@ -1,0 +1,11 @@
+# Tüm dosyaları ignore et
+*
+
+# Ama bu dosya ve klasörleri dahil et
+!netlify.toml
+!netlify/
+!netlify/functions/
+!netlify/functions/auth-confirm.js
+!package.json
+!package-lock.json
+!/.gitignore
