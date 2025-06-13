@@ -1,7 +1,5 @@
-[build]
-  command = "echo 'no build'"
-  functions = "netlify/functions"
-
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
   from = "/auth/confirm"
