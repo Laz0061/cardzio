@@ -1,59 +1,53 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-exports.handler = async function (event, context) {
+exports.handler = async (event) => {
   const { token_hash, type, next } = event.queryStringParameters;
 
   if (!token_hash || !type || !next) {
     return {
       statusCode: 400,
-      body: '❗ Eksik parametreler: token_hash, type ve next gerekli.',
+      body: 'Eksik parametre: token_hash, type, next gereklidir.',
     };
   }
 
+  // 🔐 Supabase istemcisini service role key ile başlatıyoruz
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
   try {
-    // ✅ Token doğrulama
+    // 🧠 OTP doğrulama
     const { data, error } = await supabase.auth.verifyOtp({
       token_hash,
       type,
     });
 
-    if (error) {
-      console.error('⛔ Doğrulama hatası:', error.message);
+    if (error || !data.session) {
+      console.error('⛔ Oturum alınamadı:', error?.message);
       return {
         statusCode: 401,
-        body: '⛔ Token doğrulaması başarısız.',
+        body: 'Oturum doğrulanamadı. Link süresi dolmuş olabilir.',
       };
     }
 
-    const accessToken = data?.session?.access_token;
+    const access_token = data.session.access_token;
+    const refresh_token = data.session.refresh_token;
 
-    if (!accessToken) {
-      return {
-        statusCode: 500,
-        body: '⛔ Oturum alınamadı: access_token yok.',
-      };
-    }
-
-    // ✅ next parametresine access_token eklenerek yönlendirme yapılır
-    const redirectUrl = `${next}?access_token=${accessToken}`;
+    // ✅ Başarılı doğrulama sonrası yönlendirme linkini oluştur
+    const redirectUrl = `${next}?access_token=${access_token}&refresh_token=${refresh_token}`;
 
     return {
       statusCode: 302,
       headers: {
         Location: redirectUrl,
       },
-      body: '',
     };
   } catch (err) {
-    console.error('⚠️ Beklenmeyen hata:', err.message);
+    console.error('⚠️ Sunucu hatası:', err.message);
     return {
       statusCode: 500,
-      body: '⚠️ Sunucu hatası oluştu.',
+      body: 'Sunucu hatası oluştu.',
     };
   }
 };
