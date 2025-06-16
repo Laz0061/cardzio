@@ -1,6 +1,6 @@
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
-exports.handler = async (event) => {
+export async function handler(event) {
   const { token_hash, type, next } = event.queryStringParameters;
 
   if (!token_hash || !type || !next) {
@@ -50,4 +50,4 @@ exports.handler = async (event) => {
       body: 'Sunucu hatası oluştu.',
     };
   }
-};
+}
