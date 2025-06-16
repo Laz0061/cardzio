@@ -1,18 +1,23 @@
 {
   "name": "cardzio",
-  "type": "module",
+  "type": "commonjs",
   "main": "node_modules/expo/AppEntry.js",
   "version": "1.0.0",
+  
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
+    "android": "DARK_MODE=media expo run:android",
+    "ios": "DARK_MODE=media expo run:ios",
+    "web": "DARK_MODE=media expo start --web",
     "lint": "expo lint"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@gluestack-ui/icon": "^0.1.27",
+    "@gluestack-ui/nativewind-utils": "^1.0.26",
+    "@gluestack-ui/overlay": "^0.1.22",
+    "@gluestack-ui/toast": "^1.0.9",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-masked-view/masked-view": "^0.3.2",
     "@react-navigation/bottom-tabs": "^7.3.10",
@@ -21,6 +26,7 @@
     "@react-navigation/stack": "^7.3.3",
     "@supabase/supabase-js": "^2.49.9",
     "axios": "^1.9.0",
+    "babel-plugin-module-resolver": "^5.0.2",
     "base64-arraybuffer": "^1.0.2",
     "dotenv": "^16.5.0",
     "expo": "53.0.11",
@@ -47,24 +53,30 @@
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.8",
     "expo-web-browser": "~14.1.6",
+    "native-base": "^3.4.28",
+    "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.3",
+    "react-native-css-interop": "^0.1.22",
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "5.4.0",
+    "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "~4.11.1",
+    "react-native-svg": "^15.2.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5"
+    "react-native-webview": "13.13.5",
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~19.0.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "jscodeshift": "^0.15.2",
     "typescript": "~5.8.3"
   },
   "private": true
